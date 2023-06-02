@@ -1,5 +1,3 @@
-import { Component } from 'react';
-
 export default function ContactForm({
   handleSubmit,
   handleChange,
