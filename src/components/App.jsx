@@ -3,19 +3,23 @@ import { Component } from 'react';
 import { nanoid } from 'nanoid';
 
 import ContactForm from './ContactForm';
+import ContactList from './ContactList';
+import Filter from './Filter';
+
+const USERS_ARR = [];
 
 export class App extends Component {
   state = {
     contacts: [],
-    name: '',
-    number: '',
     filter: '',
   };
 
   handleSubmit = evt => {
     evt.preventDefault();
-    const userName = this.state.name;
-    const number = this.state.number;
+
+    const form = evt.currentTarget;
+    const userName = form.elements.name.value;
+    const number = form.elements.number.value;
 
     const user = {
       name: userName,
@@ -23,15 +27,11 @@ export class App extends Component {
       number: number,
     };
 
-    this.state.contacts.push(user);
-    this.setState({ name: '', number: '' });
+    USERS_ARR.push(user);
 
-    console.log(this.state);
-  };
+    this.setState({ contacts: USERS_ARR });
 
-  handleChange = evt => {
-    const { name, value } = evt.currentTarget;
-    this.setState({ [name]: value });
+    form.reset();
   };
 
   heandleFilter = evt => {
@@ -52,65 +52,14 @@ export class App extends Component {
     return (
       <>
         <h2>Phonebook</h2>
-        {/* <form onSubmit={this.handleSubmit}>
-          <label>
-            Name
-            <input
-              type="text"
-              name="name"
-              // pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-              title="Name may contain only letters, apostrophe, dash and spaces. For example Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan"
-              required
-              value={this.state.name}
-              onChange={this.handleChange}
-            />
-          </label>
-          <label>
-            Number
-            <input
-              type="tel"
-              name="number"
-              // pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
-              value={this.state.number}
-              onChange={this.handleChange}
-            />
-          </label>
-          <button type="submit">Add Contact</button>
-        </form> */}
-
-        <ContactForm
-          handleSubmit={this.handleSubmit}
-          handleChange={this.handleChange}
-          name={this.state.name}
-          number={this.state.number}
-        />
-
+        <ContactForm handleSubmit={this.handleSubmit} />
         <h2>Contacts</h2>
-
-        <h3>Find contacts by name</h3>
-        <input
-          onChange={this.heandleFilter}
-          type="text"
-          value={this.state.filter}
+        <Filter onFilter={this.heandleFilter} filter={this.state.filter} />
+        <ContactList
+          contacts={this.state.contacts}
+          filter={this.state.filter}
+          FilteredArr={this.getFilteredArr()}
         />
-
-        {this.state.filter !== '' ? (
-          <ul>
-            {this.getFilteredArr().map(contact => (
-              <li key={contact.id}>
-                {contact.name}: {contact.number}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <ul>
-            {this.state.contacts.map(contact => (
-              <li key={contact.id}>
-                {contact.name}: {contact.number}
-              </li>
-            ))}
-          </ul>
-        )}
       </>
     );
   }
