@@ -1,13 +1,23 @@
 import PropTypes from 'prop-types';
 
-export default function ContactList({ contacts, filter, FilteredArr }) {
+export default function ContactList({
+  contacts,
+  filter,
+  FilteredArr,
+  onDeleteContact,
+}) {
   return (
     <>
       {contacts !== [] && filter !== '' ? (
         <ul>
           {FilteredArr.map(contact => (
             <li key={contact.id}>
-              {contact.name}: {contact.number}
+              <p>
+                {contact.name}: {contact.number}
+              </p>
+              <button onClick={() => onDeleteContact(contact.id)}>
+                Delete
+              </button>
             </li>
           ))}
         </ul>
@@ -15,7 +25,12 @@ export default function ContactList({ contacts, filter, FilteredArr }) {
         <ul>
           {contacts.map(contact => (
             <li key={contact.id}>
-              {contact.name}: {contact.number}
+              <p>
+                {contact.name}: {contact.number}
+              </p>
+              <button onClick={() => onDeleteContact(contact.id)}>
+                Delete
+              </button>
             </li>
           ))}
         </ul>
