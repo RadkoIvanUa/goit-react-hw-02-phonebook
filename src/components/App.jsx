@@ -25,7 +25,6 @@ export class App extends Component {
     const filteredArr = this.state.contacts.filter(contact =>
       contact.name.toLowerCase().includes(filter)
     );
-
     return filteredArr;
   }
 
@@ -36,11 +35,11 @@ export class App extends Component {
       )
     ) {
       alert(`${userData.name} is already in contacts`);
-    } else {
-      this.setState(prevState => ({
-        contacts: [...prevState.contacts, userData],
-      }));
+      return;
     }
+    this.setState(prevState => ({
+      contacts: [...prevState.contacts, userData],
+    }));
   };
 
   deleteContact = contactId => {
@@ -57,8 +56,6 @@ export class App extends Component {
         <h2>Contacts</h2>
         <Filter onFilter={this.heandleFilter} filter={this.state.filter} />
         <ContactList
-          contacts={this.state.contacts}
-          filter={this.state.filter}
           FilteredArr={this.getFilteredArr()}
           onDeleteContact={this.deleteContact}
         />
